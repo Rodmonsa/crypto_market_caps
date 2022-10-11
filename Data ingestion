@@ -1,0 +1,18 @@
+Steps I used for the data ingestion
+
+a) Create the linked services. We have to create some linked services for the data ingestion.
+  i)We will need one for http ingestion, here I describe it step by step
+    1.- Click on the right tab on Azure Data Factory labeled Manage
+    2.- Click on Linked Services.
+    3.- Click on Add new.
+    4.- Find the HTTP box and click.
+    5.- For good practices we will write down ls_(name that you want).
+    6.- For the URL we will be using the next API https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=4db82d54-601d-40e7-81bb-232f657b256e&start=1&limit=50
+    7.- Authentication type should be set on anonymus.
+    8.- Optional, for good practices you can test the connection.
+    9.- Click on Save.
+   ii) We will need another linked service for the SQL server
+    1.- Repeat steps 1-3 from previous linked service.
+    2.-In this case we should find the Azure SQL Database that you shoul've previously created with public domain or with your ip address added.
+    3.- For good practices we will write down ls_(name that you want).
+    4.- Add you selected data base and tables (see the 
