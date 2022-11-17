@@ -1,0 +1,20 @@
+{
+	"name": "ds_output_blob_cryptoapi",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cryptoscsv",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "ac907e50-7b84-43d6-b711-9623e88539f1.json",
+				"container": "cryptoscsv"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

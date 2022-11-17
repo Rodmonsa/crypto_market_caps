@@ -1,0 +1,52 @@
+{
+	"name": "ds_output_blob_csv_crypto",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cryptoscsv",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "cryptoscsv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Coin ID",
+				"type": "String"
+			},
+			{
+				"name": "Coin Name",
+				"type": "String"
+			},
+			{
+				"name": "Symbol",
+				"type": "String"
+			},
+			{
+				"name": " USD price ",
+				"type": "String"
+			},
+			{
+				"name": "Market cap",
+				"type": "String"
+			},
+			{
+				"name": "Prop_5",
+				"type": "String"
+			},
+			{
+				"name": "Prop_6",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

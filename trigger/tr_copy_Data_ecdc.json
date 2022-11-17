@@ -1,0 +1,28 @@
+{
+	"name": "tr_copy_Data_ecdc",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_muertes_Data",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"sourcerelative_URL": "Ley002/datafactory/main/respuesta_estado.csv",
+					"sinkName": "respuesta_Estado.csv"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-10-06T22:59:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

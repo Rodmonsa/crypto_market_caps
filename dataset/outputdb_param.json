@@ -1,0 +1,52 @@
+{
+	"name": "outputdb_param",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_outputdatanase",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"output_DB": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Make",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Model1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Origin",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DriveTrain",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Length",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().output_DB",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,18 @@
+{
+	"name": "ds_crypto_api",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_api_crypto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

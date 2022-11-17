@@ -1,0 +1,341 @@
+{
+	"name": "pl_ingestion_covid_population_data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Validar presencia de archivo",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_covid_population_raw_db",
+						"type": "DatasetReference"
+					},
+					"timeout": "0.00:02:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Validar presencia de archivo",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_covid_population_raw_db",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"columnCount",
+						"exists",
+						"size"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"modifiedDatetimeStart": "2022-09-19T00:00:00.757Z",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(activity('Get Metadata1').output.columnCount, 11)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Web1",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": "http://www.qwdq.com",
+								"method": "POST",
+								"body": "fallo"
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Copy Covid Data_copy1_true",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "date",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "date",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "state",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "state",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "city",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "city",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "place_type",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "place_type",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "confirmed",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "confirmed",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "deaths",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "deaths",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "order_for_place",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "order_for_place",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "is_last",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "is_last",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "estimated_population_2019",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "estimated_population_2019",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "city_ibge_code",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "city_ibge_code",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "confirmed_per_100k_inhabitants",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "confirmed_per_100k_inhabitants",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "death_rate",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "death_rate",
+												"type": "String",
+												"physicalType": "String"
+											}
+										}
+									],
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_covid_population_raw_db",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_covid_population_raw_dl",
+									"type": "DatasetReference"
+								}
+							]
+						},
+						{
+							"name": "Delete1",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy Covid Data_copy1_true",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_covid_population_raw_db",
+									"type": "DatasetReference"
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-09-19T18:26:49Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

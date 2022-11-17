@@ -1,0 +1,30 @@
+{
+	"name": "ds_output_platform_cryptos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_output_crypto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Platform_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Platform_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Platform_symbol",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Platdim"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

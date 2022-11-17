@@ -1,0 +1,129 @@
+{
+	"name": "df_crypto_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "trampilla",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_output_blob_cryptoapi",
+						"type": "DatasetReference"
+					},
+					"name": "Cryptos1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "cryptosink",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "flatten2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          status as (timestamp as string, error_code as integer, error_message as string, elapsed as integer, credit_count as integer, notice as string, total_count as integer),",
+				"          data as (id as integer, name as string, symbol as string, slug as string, num_market_pairs as integer, date_added as string, tags as string[], max_supply as integer, circulating_supply as integer, total_supply as integer, platform as (id as string, name as string, symbol as string, slug as string, token_address as string), cmc_rank as integer, self_reported_circulating_supply as string, self_reported_market_cap as string, tvl_ratio as string, last_updated as string, quote as (USD as (price as double, volume_24h as double, volume_change_24h as double, percent_change_1h as double, percent_change_24h as double, percent_change_7d as double, percent_change_30d as double, percent_change_60d as double, percent_change_90d as double, market_cap as double, market_cap_dominance as double, fully_diluted_market_cap as double, tvl as string, last_updated as string)))[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> source1",
+				"source(output(",
+				"          data as (circulating_supply as double, cmc_rank as short, date_added as string, id as short, last_updated as string, max_supply as long, name as string, num_market_pairs as integer, platform as (id as short, name as string, slug as string, symbol as string, token_address as string), quote as (USD as (fully_diluted_market_cap as double, last_updated as string, market_cap as double, market_cap_dominance as double, percent_change_1h as double, percent_change_24h as double, percent_change_30d as double, percent_change_60d as double, percent_change_7d as double, percent_change_90d as double, price as double, tvl as double, volume_24h as double, volume_change_24h as double)), self_reported_circulating_supply as double, self_reported_market_cap as double, slug as string, symbol as string, tags as string[], total_supply as double, tvl_ratio as double)[],",
+				"          status as (credit_count as boolean, elapsed as short, error_code as boolean, error_message as string, notice as string, timestamp as string, total_count as short)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> Cryptos1",
+				"source1 foldDown(unroll(data, data),",
+				"     mapColumn(",
+				"          status,",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 derive(Id = data.id,",
+				"          Name = data.name,",
+				"          symbol = data.symbol,",
+				"          {USD price} = data.quote.USD.price,",
+				"          {Market Cap} = data.quote.USD.market_cap,",
+				"          {Platform Id} = data.platform.id,",
+				"          {Platform name} = data.platform.name,",
+				"          {Platform symbol} = data.platform.symbol) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          Id,",
+				"          Name,",
+				"          symbol,",
+				"          {USD price},",
+				"          {Market Cap},",
+				"          {Platform Id},",
+				"          {Platform name},",
+				"          {Platform symbol}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn2 select(mapColumn(",
+				"          Id,",
+				"          name,",
+				"          symbol,",
+				"          platform_id,",
+				"          platform_name,",
+				"          platform_symbol,",
+				"          Price,",
+				"          Market_cap",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"flatten2 derive(Id = data.id,",
+				"          name = data.name,",
+				"          symbol = data.symbol,",
+				"          platform_id = data.platform.id,",
+				"          platform_name = data.platform.name,",
+				"          platform_symbol = data.platform.symbol,",
+				"          Price = abs(data.quote.USD.price),",
+				"          Market_cap = abs(data.quote.USD.market_cap)) ~> derivedColumn2",
+				"Cryptos1 foldDown(unroll(data, data),",
+				"     mapColumn(",
+				"          data,",
+				"          status",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

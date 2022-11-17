@@ -1,0 +1,25 @@
+{
+	"name": "trigger_covid_blob_storage1",
+	"properties": {
+		"description": "qd",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestion_covid_population_data",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/population/blobs/covid_population.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/88e86b81-e5f7-4201-84fe-3e781830d94e/resourceGroups/AzureDataFactory/providers/Microsoft.Storage/storageAccounts/coviddbs",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

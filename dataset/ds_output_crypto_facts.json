@@ -1,0 +1,34 @@
+{
+	"name": "ds_output_crypto_facts",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_output_crypto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USD_price",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Market_cap",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Platform_id",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Fact"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

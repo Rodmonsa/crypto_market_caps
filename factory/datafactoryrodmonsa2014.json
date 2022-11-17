@@ -1,0 +1,9 @@
+{
+	"name": "datafactoryrodmonsa2014",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3dd60de5-92a7-44b0-9609-bd307958484d",
+		"tenantId": "64d401de-6b24-421f-961c-1688a7941185"
+	}
+}
